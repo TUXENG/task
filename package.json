@@ -2,7 +2,7 @@
   "name": "task-vscode",
   "displayName": "Task TODO Manager",
   "description": "Manejo inteligente de task.md con VS Code",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "TUXENG",
   "engines": {
     "vscode": "^1.99.3"

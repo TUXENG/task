@@ -3,8 +3,10 @@ import * as vscode from 'vscode';
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.workspace.onDidChangeTextDocument(autoInsertCheckbox),
-    vscode.workspace.onDidSaveTextDocument(validateTaskFile)
-  );
+    vscode.workspace.onDidSaveTextDocument((doc)=> {
+      validateTaskFile(doc, 'task.md');
+      validateTaskFile(doc, 'progress.md');
+  }));
 }
 
 const allowedHeaders = ['## TODO', '## WID', '## DONE'];
@@ -43,8 +45,8 @@ function getCurrentSection(doc: vscode.TextDocument, line: number): string {
   return '';
 }
 
-function validateTaskFile(doc: vscode.TextDocument) {
-  if (!doc.fileName.endsWith('task.md')) return;
+function validateTaskFile(doc: vscode.TextDocument, fileName: string) {
+  if (!doc.fileName.endsWith(fileName)) return;
 
   const lines = doc.getText().split('\n');
   const seen = new Set<string>();
