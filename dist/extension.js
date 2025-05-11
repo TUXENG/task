@@ -80,15 +80,17 @@ function validateTaskFile(doc) {
     let currentHeader = '';
     for (const line of lines) {
         const trimmed = line.trim();
+        // Si es encabezado
         if (trimmed.startsWith('##')) {
             if (!allowedHeaders.includes(trimmed)) {
-                vscode.window.showWarningMessage(`Encabezado inválido: "${trimmed}". Solo se permiten: ${allowedHeaders.join(', ')}`);
-                return;
+                // OMITIR encabezados inválidos
+                continue;
             }
             currentHeader = trimmed;
             fixedLines.push(trimmed);
             continue;
         }
+        // Si estamos dentro de una sección válida
         if (checkboxMap[currentHeader]) {
             const prefix = checkboxMap[currentHeader];
             if (trimmed.startsWith(prefix)) {
@@ -103,7 +105,8 @@ function validateTaskFile(doc) {
             }
         }
         else {
-            fixedLines.push(trimmed);
+            // Si no estamos en una sección válida, ignorar contenido
+            continue;
         }
     }
     const newText = fixedLines.join('\n');

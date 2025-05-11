@@ -49,42 +49,46 @@ function validateTaskFile(doc: vscode.TextDocument) {
   const lines = doc.getText().split('\n');
   const seen = new Set<string>();
   const fixedLines: string[] = [];
+
   let currentHeader = '';
 
   for (const line of lines) {
-    const trimmed = line.trim();
+      const trimmed = line.trim();
 
-    if (trimmed.startsWith('##')) {
-      if (!allowedHeaders.includes(trimmed)) {
-        vscode.window.showWarningMessage(`Encabezado inválido: "${trimmed}". Solo se permiten: ${allowedHeaders.join(', ')}`);
-        return;
+      // Si es encabezado
+      if (trimmed.startsWith('##')) {
+          if (!allowedHeaders.includes(trimmed)) {
+              // OMITIR encabezados inválidos
+              continue;
+          }
+          currentHeader = trimmed;
+          fixedLines.push(trimmed);
+          continue;
       }
-      currentHeader = trimmed;
-      fixedLines.push(trimmed);
-      continue;
-    }
 
-    if (checkboxMap[currentHeader]) {
-      const prefix = checkboxMap[currentHeader];
-      if (trimmed.startsWith(prefix)) {
-        const content = trimmed.slice(prefix.length).trim();
-        if (!content || seen.has(content)) continue;
-        seen.add(content);
-        fixedLines.push(`${prefix}${content}`);
-      } else if (trimmed === '') {
-        fixedLines.push('');
+      // Si estamos dentro de una sección válida
+      if (checkboxMap[currentHeader]) {
+          const prefix = checkboxMap[currentHeader];
+          if (trimmed.startsWith(prefix)) {
+              const content = trimmed.slice(prefix.length).trim();
+              if (!content || seen.has(content)) continue;
+              seen.add(content);
+              fixedLines.push(`${prefix}${content}`);
+          } else if (trimmed === '') {
+              fixedLines.push('');
+          }
+      } else {
+          // Si no estamos en una sección válida, ignorar contenido
+          continue;
       }
-    } else {
-      fixedLines.push(trimmed);
-    }
   }
 
   const newText = fixedLines.join('\n');
   if (newText !== doc.getText()) {
-    const edit = new vscode.WorkspaceEdit();
-    const fullRange = new vscode.Range(doc.positionAt(0), doc.positionAt(doc.getText().length));
-    edit.replace(doc.uri, fullRange, newText);
-    vscode.workspace.applyEdit(edit);
+      const edit = new vscode.WorkspaceEdit();
+      const fullRange = new vscode.Range(doc.positionAt(0), doc.positionAt(doc.getText().length));
+      edit.replace(doc.uri, fullRange, newText);
+      vscode.workspace.applyEdit(edit);
   }
 }
 

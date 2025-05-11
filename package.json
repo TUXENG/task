@@ -5,7 +5,7 @@
   "version": "0.0.1",
   "publisher": "TUXENG",
   "engines": {
-    "vscode": "^1.100.0"
+    "vscode": "^1.99.3"
   },
   "categories": [
     "Other"
@@ -28,13 +28,13 @@
     "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
-    "@types/vscode": "^1.100.0",
+    "@types/vscode": "^1.99.3",
     "typescript": "^5.8.3",
     "vscode-test": "^1.6.1"
   }, 
   "repository": {
   "type": "git",
-  "url": "https://github.com/tuusuario/tu-repositorio.git"
+  "url":"https://github.com/TUXENG/task.git"
   }
 }
 
