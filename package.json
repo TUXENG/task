@@ -1,0 +1,40 @@
+{
+  "name": "task-vscode",
+  "displayName": "Task TODO Manager",
+  "description": "Manejo inteligente de task.md con VS Code",
+  "version": "0.0.1",
+  "publisher": "TUXENG",
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:markdown"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "task-vscode.addTodo",
+        "title": "Agregar tarea"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.100.0",
+    "typescript": "^5.8.3",
+    "vscode-test": "^1.6.1"
+  }, 
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/tuusuario/tu-repositorio.git"
+  }
+}
+
