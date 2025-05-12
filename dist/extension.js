@@ -72,7 +72,9 @@ function getCurrentSection(doc, line) {
     return '';
 }
 function validateTaskFile(doc) {
-    if (!doc.fileName.endsWith('task.md'))
+    const isTask = doc.fileName.endsWith('task.md');
+    const isProgress = doc.fileName.endsWith('progress.md');
+    if (!isTask && !isProgress)
         return;
     const lines = doc.getText().split('\n');
     const seen = new Set();
@@ -80,24 +82,27 @@ function validateTaskFile(doc) {
     let currentHeader = '';
     for (const line of lines) {
         const trimmed = line.trim();
-        // Si es encabezado
+        // Validar encabezados
         if (trimmed.startsWith('##')) {
             if (!allowedHeaders.includes(trimmed)) {
-                // OMITIR encabezados inválidos
-                continue;
+                vscode.window.showWarningMessage(`Encabezado inválido: "${trimmed}". Solo se permiten: ${allowedHeaders.join(', ')}`);
+                return;
             }
             currentHeader = trimmed;
             fixedLines.push(trimmed);
             continue;
         }
-        // Si estamos dentro de una sección válida
         if (checkboxMap[currentHeader]) {
             const prefix = checkboxMap[currentHeader];
             if (trimmed.startsWith(prefix)) {
-                const content = trimmed.slice(prefix.length).trim();
-                if (!content || seen.has(content))
+                let content = trimmed.slice(prefix.length).trim();
+                // Quitar ID si estamos en progress.md
+                const key = isProgress
+                    ? content.replace(/^\[#\d+\]\s*/, '')
+                    : content;
+                if (!key || seen.has(key))
                     continue;
-                seen.add(content);
+                seen.add(key);
                 fixedLines.push(`${prefix}${content}`);
             }
             else if (trimmed === '') {
@@ -105,8 +110,7 @@ function validateTaskFile(doc) {
             }
         }
         else {
-            // Si no estamos en una sección válida, ignorar contenido
-            continue;
+            fixedLines.push(trimmed);
         }
     }
     const newText = fixedLines.join('\n');
