@@ -1,22 +1,56 @@
-# Task Manager (VS Code Extension)
+# Task TODO Manager
 
-Esta extensión de Visual Studio Code está diseñada para mantener el archivo `task.md` bien estructurado. Sus principales funciones incluyen:
+Extensión para Visual Studio Code que permite gestionar de forma inteligente archivos `task.md` y `progress.md` para el seguimiento de tareas, WIDs y progreso.
 
-- Validar que solo existan las secciones `## TODO`, `## WID` y `## DONE`.
-- Insertar automáticamente `- [ ]`, `- [~]` o `- [x]` al presionar Enter dentro de cada sección.
-- Prevenir tareas vacías o duplicadas dentro de `## TODO`.
+## ✨ Características principales
 
-## Instalación
+- ✅ **Reconocimiento automático de secciones**: Solo se permiten encabezados válidos (`## TODO`, `## WID`, `## DONE`).
+- ✏️ **Autocompletado de casillas de tareas**: Al presionar `Enter` dentro de una sección, se inserta automáticamente el marcador correspondiente:
+  - `## TODO` → `- [ ]`
+  - `## WID`  → `- [~]`
+  - `## DONE` → `- [x]`
+- 🧹 **Limpieza automática al guardar**:
+  - Elimina tareas vacías o duplicadas.
+  - Para `progress.md`, ignora los IDs (`[#001]`, `[#002]`, etc.) al detectar duplicados.
+- ⚠️ **Validación de encabezados**: Si se usan encabezados inválidos, se muestra una advertencia.
 
-1. Clona este repositorio en una carpeta local.
-2. Abre la carpeta en VS Code.
-3. Ejecuta `npm install` para instalar las dependencias.
-4. Pulsa `F5` para abrir una nueva ventana de VS Code con la extensión activa en modo desarrollo.
+## 📁 Estructura esperada
 
-## Uso
+### `task.md`
+```markdown
+## TODO
+- [ ] Preparar informe
 
-Edita tu archivo `task.md`. Las tareas serán automáticamente validadas y corregidas al guardar, y la extensión insertará la marca de tarea correspondiente según la sección donde estés escribiendo.
+## WID
+- [~] Desarrollo del módulo
 
-## Licencia
+## DONE
+- [x] Documentación completa
 
-MIT
+### progress.md
+
+## TODO
+- [ ] [#001] Preparar informe
+- [ ] [#002] Revisar entregables
+
+## WID 
+- [~] Terminar versión release
+
+## DONE
+- [x] [#003] Publicar versión BETA
+
+## 🛠️ Instalación
+
+- Clona el repositorio o descarga el archivo .vsix.
+
+- Instala la extensión manualmente:
+''' code --install-extension task-vscode-0.0.1.vsix '''
+
+### 📦 Desarrollo
+## Requisitos
+
+- Node.js
+
+- TypeScript
+
+- VS Code extensibility tools

@@ -3,10 +3,8 @@ import * as vscode from 'vscode';
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.workspace.onDidChangeTextDocument(autoInsertCheckbox),
-    vscode.workspace.onDidSaveTextDocument((doc)=> {
-      validateTaskFile(doc, 'task.md');
-      validateTaskFile(doc, 'progress.md');
-  }));
+    vscode.workspace.onDidSaveTextDocument( validateTaskFile)
+  );
 }
 
 const allowedHeaders = ['## TODO', '## WID', '## DONE'];
@@ -45,8 +43,11 @@ function getCurrentSection(doc: vscode.TextDocument, line: number): string {
   return '';
 }
 
-function validateTaskFile(doc: vscode.TextDocument, fileName: string) {
-  if (!doc.fileName.endsWith(fileName)) return;
+function validateTaskFile(doc: vscode.TextDocument) {
+  const isTask = doc.fileName.endsWith('task.md');
+  const isProgress = doc.fileName.endsWith('progress.md');
+
+  if (!isTask && !isProgress) return;
 
   const lines = doc.getText().split('\n');
   const seen = new Set<string>();
@@ -57,31 +58,37 @@ function validateTaskFile(doc: vscode.TextDocument, fileName: string) {
   for (const line of lines) {
       const trimmed = line.trim();
 
-      // Si es encabezado
+      // Validar encabezados
       if (trimmed.startsWith('##')) {
           if (!allowedHeaders.includes(trimmed)) {
-              // OMITIR encabezados inválidos
-              continue;
+              vscode.window.showWarningMessage(`Encabezado inválido: "${trimmed}". Solo se permiten: ${allowedHeaders.join(', ')}`);
+              return;
           }
           currentHeader = trimmed;
           fixedLines.push(trimmed);
           continue;
       }
 
-      // Si estamos dentro de una sección válida
       if (checkboxMap[currentHeader]) {
           const prefix = checkboxMap[currentHeader];
+
           if (trimmed.startsWith(prefix)) {
-              const content = trimmed.slice(prefix.length).trim();
-              if (!content || seen.has(content)) continue;
-              seen.add(content);
+              let content = trimmed.slice(prefix.length).trim();
+
+              // Quitar ID si estamos en progress.md
+              const key = isProgress
+                  ? content.replace(/^\[#\d+\]\s*/, '')
+                  : content;
+
+              if (!key || seen.has(key)) continue;
+
+              seen.add(key);
               fixedLines.push(`${prefix}${content}`);
           } else if (trimmed === '') {
               fixedLines.push('');
           }
       } else {
-          // Si no estamos en una sección válida, ignorar contenido
-          continue;
+          fixedLines.push(trimmed);
       }
   }
 
@@ -93,5 +100,6 @@ function validateTaskFile(doc: vscode.TextDocument, fileName: string) {
       vscode.workspace.applyEdit(edit);
   }
 }
+
 
 export function deactivate() {}
