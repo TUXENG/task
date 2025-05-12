@@ -26,7 +26,7 @@ Extensión para Visual Studio Code que permite gestionar de forma inteligente ar
 
 ## DONE
 - [x] Documentación completa
-''' 
+```
 ### progress.md
 ```markdown
 ## TODO
@@ -38,14 +38,14 @@ Extensión para Visual Studio Code que permite gestionar de forma inteligente ar
 
 ## DONE
 - [x] [#003] Publicar versión BETA
-markdown'''
+```
 
 ## 🛠️ Instalación
 
 - Clona el repositorio o descarga el archivo .vsix.
 
 - Instala la extensión manualmente:
-''' code --install-extension task-vscode-0.0.1.vsix '''
+```code --install-extension task-vscode-0.0.1.vsix ```
 
 ### 📦 Desarrollo
 ## Requisitos
