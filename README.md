@@ -47,8 +47,8 @@ Extensión para Visual Studio Code que permite gestionar de forma inteligente ar
 - Instala la extensión manualmente:
 ```code --install-extension task-vscode-0.0.1.vsix ```
 
-### 📦 Desarrollo
-## Requisitos
+## 📦 Desarrollo
+### Requisitos
 
 - Node.js
 
