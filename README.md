@@ -26,9 +26,9 @@ Extensión para Visual Studio Code que permite gestionar de forma inteligente ar
 
 ## DONE
 - [x] Documentación completa
-
+''' 
 ### progress.md
-
+```markdown
 ## TODO
 - [ ] [#001] Preparar informe
 - [ ] [#002] Revisar entregables
@@ -38,6 +38,7 @@ Extensión para Visual Studio Code que permite gestionar de forma inteligente ar
 
 ## DONE
 - [x] [#003] Publicar versión BETA
+'''
 
 ## 🛠️ Instalación
 
