@@ -38,7 +38,7 @@ Extensión para Visual Studio Code que permite gestionar de forma inteligente ar
 
 ## DONE
 - [x] [#003] Publicar versión BETA
-'''
+markdown'''
 
 ## 🛠️ Instalación
 
